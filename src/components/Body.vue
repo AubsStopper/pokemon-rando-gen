@@ -1,0 +1,224 @@
+<template>
+ <div>
+    <div id="main" >
+      <div>{{ }} </div>
+      <transition name="slide-fade">
+        <div id="pokeball-container" v-show="!show" >
+          <img id="pokeball" src="https://pngimg.com/uploads/pokeball/pokeball_PNG21.png" :style="{ height: window.height + 'px' }" >
+          </div>
+      </transition>
+      <transition name= "fade">  
+        <div id="pokemon-container" v-show="show">  
+          <img id="pokemon"  v-show='show'  v-bind:src="char1" :style="{ height: window.height + 'px' }">
+        </div>
+      </transition>
+      </div>
+      <button v-on:click='toggle' v-if="!show">Toss The Ball</button>   
+       <button v-on:click='toggle' v-else>Get Another Ball</button>   
+   </div>
+</template>
+
+<script>
+import axios from "axios";
+
+
+export default {
+  name: 'Body',
+  data() {
+    return {
+      wholechar: null,
+      char1: null,
+      window: {
+        width: 0,
+        height: 0
+      },
+      show: false,
+      id: 6,
+      randoNum: null,
+      tempChar: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/132.svg"
+    }
+  },
+  props: {
+    msg: String
+  },
+  created() {
+    window.addEventListener('resize', this.handleResize);
+    this.handleResize();
+  },
+  mounted() {
+        
+    
+  },
+  unmounted() {
+    window.removeEventListener('resize', this.handleResize);
+  },
+  methods: {
+    handleResize() {
+      this.window.width = window.innerWidth - 200;
+      this.window.height = window.innerHeight - 201;
+
+      console.log("Height " + window.innerHeight);
+      console.log("Width " + window.innerWidth);
+
+
+
+    },
+    getChar1: function (id) {
+      axios
+        .get(`https://pokeapi.co/api/v2/pokemon/${id}`)
+        .then((response) => {
+          this.wholechar = response.data;
+          this.char1 = response.data.sprites.other.dream_world.front_default;
+          });
+
+    
+    
+  },
+  toggle() {
+    this.show = !this.show
+
+    if (this.show) {
+        this.randoNum = Math.floor(Math.random() * 101)
+
+        if (this.randoNum > 1118) {
+            this.randoNum = Math.floor(Math.random() * 101)
+        } else {
+            setTimeout(() => {
+              this.getChar1(this.randoNum)
+            }, 1500 )
+           
+        }
+
+
+      
+    } else {
+      this.char1 = null;
+    }
+
+  },
+
+
+}
+
+}
+</script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style scoped>
+#main {
+  margin-top: 100px;
+}
+
+h3 {
+  margin: 40px 0 0;
+}
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+li {
+  display: inline-block;
+  margin: 0 10px;
+}
+a {
+  color: #42b983;
+}
+
+#pokeball-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+
+}
+
+#pokemon-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+
+}
+
+
+.slide-fade-enter-active {
+  transition: all 6s ease;
+}
+.slide-fade-leave-active {
+  transition: all 1.5s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+ 
+}
+.slide-fade-enter, .slide-fade-leave-to
+/* .slide-fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
+   transform: scale(.1);
+  animation: bounce-in .8s; 
+}
+
+@keyframes bounce-in {
+  from, to { transform: scale(1, 0); }
+  0% {
+    transform: scale(0.9, 1.1)
+  }
+  25% {
+    transform: scale(.8);
+    transform: translateX(10px)
+  }
+  50%{
+      transform: scale(.5);
+      transform: translateX(10px)
+  }
+  75% {
+      transform: scale(.4);
+      transform: translateX(10px)
+  }
+  100% {
+    transform: scale(.1);
+  }
+}
+
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: 0.5s;
+}
+
+button {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  margin: 30px;
+
+  
+}
+
+button {
+	box-shadow: 3px 4px 0px 0px #1564ad;
+	background:linear-gradient(to bottom, #79bbff 5%, #378de5 100%);
+	background-color:#79bbff;
+	border-radius:5px;
+	border:1px solid #337bc4;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:17px;
+	font-weight:bold;
+	padding:12px 44px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #528ecc;
+}
+.button:hover {
+	background:linear-gradient(to bottom, #378de5 5%, #79bbff 100%);
+	background-color:#378de5;
+}
+.button:active {
+	position:relative;
+	top:1px;
+}
+
+</style>
