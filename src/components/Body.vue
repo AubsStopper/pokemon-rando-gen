@@ -32,6 +32,7 @@ export default {
         width: 0,
         height: 0
       },
+      max: 898,
       show: false,
       id: 6,
       randoNum: null,
@@ -84,23 +85,18 @@ export default {
     
     
   },
+  getRandomInt: function (max) {
+  return Math.floor(Math.random() * Math.floor(max));
+},
   toggle() {
     this.show = !this.show
 
     if (this.show) {
-        this.randoNum = Math.floor(Math.random() * 101)
-
-        if (this.randoNum > 1118) {
-            this.randoNum = Math.floor(Math.random() * 101)
-        } else {
-            setTimeout(() => {
-              this.getChar1(this.randoNum)
-            }, 1500 )
-           
-        }
-
-
-      
+        this.randoNum = this.getRandomInt(this.max);
+          setTimeout(() => {
+            this.getChar1(this.randoNum)
+          }, 1500) 
+ 
     } else {
       this.char1 = null;
     }
