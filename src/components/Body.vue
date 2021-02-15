@@ -1,7 +1,9 @@
 <template>
  <div>
     <div id="main" >
-      <div>{{ }} </div>
+      <div>
+        <h3>{{ nameP }} </h3> 
+        </div>
       <transition name="slide-fade">
         <div id="pokeball-container" v-show="!show" >
           <img id="pokeball" src="https://pngimg.com/uploads/pokeball/pokeball_PNG21.png" :style="{ height: window.height + 'px' }" >
@@ -27,6 +29,7 @@ export default {
   data() {
     return {
       wholechar: null,
+      nameP: null,
       char1: null,
       window: {
         width: 0,
@@ -79,6 +82,8 @@ export default {
         .then((response) => {
           this.wholechar = response.data;
           this.char1 = response.data.sprites.other.dream_world.front_default;
+          this.nameP = response.data.species.name.toUpperCase();
+          console.log(this.nameP)
           });
 
     
@@ -97,12 +102,13 @@ export default {
               this.getChar1(this.randoNum)
             }, 1500 )
            
-        }
+    }
 
 
       
     } else {
       this.char1 = null;
+      this.nameP = null;
     }
 
   },
