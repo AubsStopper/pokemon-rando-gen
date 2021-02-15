@@ -9,7 +9,7 @@
       </transition>
       <transition name= "fade">  
         <div id="pokemon-container" v-show="show">  
-          <img id="pokemon"  v-show='show'  v-bind:src="char1" :style="{ height: window.height + 'px' }">
+          <img id="pokemon"  v-show='show'  v-bind:src="char1" :style="{ height: window.height + 'px', width: window.width }">
         </div>
       </transition>
       </div>
@@ -57,8 +57,18 @@ export default {
       this.window.width = window.innerWidth - 200;
       this.window.height = window.innerHeight - 201;
 
-      console.log("Height " + window.innerHeight);
-      console.log("Width " + window.innerWidth);
+      console.log(window.innerWidth)
+      console.log(window.innerHeight)
+
+      if (this.window.width < this.window.height) {
+          this.window.height = window.innerWidth - 201;
+      } else {
+          this.window.width = window.innerHeight - 200;
+      }
+
+      
+      console.log("Height " + window.width);
+      console.log("Width " + window.height);
 
 
 
