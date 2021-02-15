@@ -2,7 +2,7 @@
  <div>
     <div id="main" >
       <div>
-        <h3>{{ nameP }} </h3> 
+        <h3>{{ id }}  {{ nameP }} </h3> 
         </div>
       <transition name="slide-fade">
         <div id="pokeball-container" v-show="!show" >
@@ -36,7 +36,7 @@ export default {
         height: 0
       },
       show: false,
-      id: 6,
+      id: null,
       randoNum: null,
       tempChar: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/132.svg"
     }
@@ -83,7 +83,8 @@ export default {
           this.wholechar = response.data;
           this.char1 = response.data.sprites.other.dream_world.front_default;
           this.nameP = response.data.species.name.toUpperCase();
-          console.log(this.nameP)
+          this.id = response.data.id;
+          console.log(this.id)
           });
 
     
@@ -109,6 +110,7 @@ export default {
     } else {
       this.char1 = null;
       this.nameP = null;
+      this.id = null;
     }
 
   },
