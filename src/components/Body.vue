@@ -80,6 +80,9 @@ export default {
         .then((response) => {
           this.wholechar = response.data;
           this.char1 = response.data.sprites.other.dream_world.front_default;
+          if (!this.char1) {
+            this.char1 = response.data.sprites.other.offical_artwork.front_default;
+          }
           });
 
     
