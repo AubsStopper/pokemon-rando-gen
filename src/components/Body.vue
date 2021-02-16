@@ -26,7 +26,10 @@ export default {
   name: 'Body',
   data() {
     return {
+      characters: null,
       wholechar: null,
+      charURL: null,
+      charURLID: null,
       char1: null,
       window: {
         width: 0,
@@ -34,7 +37,7 @@ export default {
       },
       show: false,
       id: 6,
-      randoNum: null,
+      randCharID: null,
       tempChar: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/132.svg"
     }
   },
@@ -44,10 +47,9 @@ export default {
   created() {
     window.addEventListener('resize', this.handleResize);
     this.handleResize();
+    this.getAllCharacters();
   },
   mounted() {
-        
-    
   },
   unmounted() {
     window.removeEventListener('resize', this.handleResize);
@@ -64,52 +66,42 @@ export default {
           this.window.height = window.innerWidth - 201;
       } else {
           this.window.width = window.innerHeight - 200;
-      }
-
-      
+      }      
       console.log("Height " + window.width);
       console.log("Width " + window.height);
-
-
-
     },
-    getChar1: function (id) {
+    getAllCharacters: function () {
+      axios
+        .get('https://pokeapi.co/api/v2/pokemon/?limit=2000')
+        .then((response) => {
+          this.characters = response.data;          
+        })
+    },
+    getOneCharacter: function (id) {
       axios
         .get(`https://pokeapi.co/api/v2/pokemon/${id}`)
         .then((response) => {
           this.wholechar = response.data;
           this.char1 = response.data.sprites.other.dream_world.front_default;
           });
-
-    
-    
-  },
+    },
+    getRandInt: function(min, max) {
+      return Math.floor(Math.random() * (max-min+1) + min); // min and max-inclusive
+    },
   toggle() {
     this.show = !this.show
-
     if (this.show) {
-        this.randoNum = Math.floor(Math.random() * 101)
-
-        if (this.randoNum > 1118) {
-            this.randoNum = Math.floor(Math.random() * 101)
-        } else {
-            setTimeout(() => {
-              this.getChar1(this.randoNum)
-            }, 1500 )
-           
-        }
-
-
-      
+      this.randCharID = this.getRandInt(0, this.characters.count);
+      setTimeout(() => {
+        this.charURL = this.characters.results[this.randCharID].url;
+        this.charURLID = (this.charURL.split("/"))[6]; // 6th position in apiv2
+        this.getOneCharacter(this.charURLID)
+      }, 1500 );
     } else {
       this.char1 = null;
     }
-
   },
-
-
-}
-
+  }
 }
 </script>
 
