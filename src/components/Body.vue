@@ -1,7 +1,7 @@
 <template>
  <div>
     <div id="main" >
-      <div>{{ }} </div>
+      <div class="name"> {{charName }} </div>
       <transition name="slide-fade">
         <div id="pokeball-container" v-show="!show" >
           <img id="pokeball" src="https://pngimg.com/uploads/pokeball/pokeball_PNG21.png" :style="{ height: window.height + 'px' }" >
@@ -14,7 +14,7 @@
       </transition>
       </div>
       <button v-on:click='toggle' v-if="!show">Toss The Ball</button>   
-       <button v-on:click='toggle' v-else>Get Another Ball</button>   
+      <button v-on:click='toggle' v-else>Get Another Ball</button>   
    </div>
 </template>
 
@@ -26,6 +26,8 @@ export default {
   name: 'Body',
   data() {
     return {
+      imageObj: {},
+      charName: null,
       wholechar: null,
       char1: null,
       window: {
@@ -34,6 +36,7 @@ export default {
       },
       max: 898,
       show: false,
+      officalartwork: "offical-artwork",
       id: 6,
       randoNum: null,
       tempChar: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/132.svg"
@@ -80,8 +83,11 @@ export default {
         .then((response) => {
           this.wholechar = response.data;
           this.char1 = response.data.sprites.other.dream_world.front_default;
-          if (!this.char1) {
-            this.char1 = response.data.sprites.other.offical_artwork.front_default;
+          this.charName = response.data.name
+          if (!response.data.sprites.other.dream_world.front_default) {
+            // Temp Fix until we can cascade another image
+            console.log("try again")
+            this.getChar1(this.getRandomInt(this.max))
           }
           });
 
@@ -102,6 +108,7 @@ export default {
  
     } else {
       this.char1 = null;
+      this.charName = null;
     }
 
   },
@@ -114,6 +121,13 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+
+.name {
+  background-color:#42b983;
+  font-weight: 700;
+  font-size: 30px;
+}
+
 #main {
   margin-top: 100px;
 }
