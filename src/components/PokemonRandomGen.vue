@@ -13,21 +13,29 @@
         </div>
       </transition>
       </div>
-      <button v-on:click='toggle' v-if="!show">Toss The Ball</button>   
-      <button v-on:click='toggle' v-else>Get Another Ball</button>   
+      <div class="button-container">
+        <button v-on:click='toggle' v-if="!show">Toss The Ball</button>   
+        <button v-on:click='toggle' v-else>Get Another Ball</button>   
+        <MoreInfoModal v-show="false" :wholechar="wholechar"/>
+      </div>
    </div>
 </template>
 
 <script>
 import axios from "axios";
+import MoreInfoModal from './MoreInfoModal.vue'
 
 
 export default {
   name: 'Body',
+  components: {
+    MoreInfoModal
+  },
   data() {
     return {
       characters: null,
-      wholechar: null,
+      charName: null,
+      wholechar: {},
       charURL: null,
       charURLID: null,
       char1: null,
@@ -59,13 +67,13 @@ export default {
   methods: {
     handleResize() {
       this.window.width = window.innerWidth - 200;
-      this.window.height = window.innerHeight - 201;
+      this.window.height = window.innerHeight - 221;
 
       console.log(window.innerWidth)
       console.log(window.innerHeight)
 
       if (this.window.width < this.window.height) {
-          this.window.height = window.innerWidth - 201;
+          this.window.height = window.innerWidth - 221;
       } else {
           this.window.width = window.innerHeight - 200;
       }      
@@ -77,6 +85,8 @@ export default {
         .get('https://pokeapi.co/api/v2/pokemon/?limit=2000')
         .then((response) => {
           this.characters = response.data;          
+        }).catch(err => {
+          console.log(err)
         })
     },
     getOneCharacter: function (id) {
@@ -85,13 +95,15 @@ export default {
         .then((response) => {
           this.wholechar = response.data;
           this.char1 = response.data.sprites.other.dream_world.front_default;
-          this.charName = response.data.name
+          this.charName = response.data.name;
           if (!response.data.sprites.other.dream_world.front_default) {
             // Temp Fix until we can cascade another image
             console.log("try again")
-            this.getChar1(this.getRandomInt(this.max))
+            this.getOneCharacter(this.getRandInt(0, this.characters.count))
           }
-          });
+          }).catch(err => {
+            console.log("That's a bad", err)
+          })
     },
     getRandInt: function(min, max) {
       return Math.floor(Math.random() * (max-min+1) + min); // min and max-inclusive
@@ -107,6 +119,7 @@ export default {
       }, 1500 );
     } else {
       this.charName = null;
+      this.char1 = null;
     }
   },
   }
@@ -114,12 +127,12 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style>
 
 .name {
-  background-color:#42b983;
   font-weight: 700;
   font-size: 30px;
+  margin-bottom: 10px;
 }
 
 #main {
@@ -145,18 +158,19 @@ a {
   display: flex;
   justify-content: center;
   align-items: center;
-
-
 }
 
 #pokemon-container {
   display: flex;
   justify-content: center;
   align-items: center;
-
-
 }
 
+.button-container {
+  display: flex;
+  justify-content: space-between;
+    margin: 20px;
+}
 
 .slide-fade-enter-active {
   transition: all 6s ease;
@@ -202,15 +216,6 @@ a {
 .fade-enter-active,
 .fade-leave-active {
   transition: 0.5s;
-}
-
-button {
-  position: absolute;
-  left: 50%;
-  bottom: 0;
-  margin: 30px;
-
-  
 }
 
 button {
