@@ -1,7 +1,9 @@
 <template>
  <div>
     <div id="main" >
-      <div>{{ }} </div>
+      <div>
+        <h3>{{ id }}  {{ nameP }} </h3> 
+        </div>
       <transition name="slide-fade">
         <div id="pokeball-container" v-show="!show" >
           <img id="pokeball" src="https://pngimg.com/uploads/pokeball/pokeball_PNG21.png" :style="{ height: window.height + 'px' }" >
@@ -83,6 +85,9 @@ export default {
         .then((response) => {
           this.wholechar = response.data;
           this.char1 = response.data.sprites.other.dream_world.front_default;
+          this.nameP = response.data.species.name.toUpperCase();
+          this.id = response.data.id;
+          console.log(this.id)
           });
     },
     getRandInt: function(min, max) {
@@ -99,6 +104,8 @@ export default {
       }, 1500 );
     } else {
       this.char1 = null;
+      this.nameP = null;
+      this.id = null;
     }
   },
   }
