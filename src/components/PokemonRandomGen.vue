@@ -1,7 +1,7 @@
 <template>
  <div>
     <div id="main" >
-      <div class="name"> {{charName }} </div>
+      <div class="name"> {{ nameDisplay }} </div>
       <transition name="slide-fade">
         <div id="pokeball-container" v-show="!show" >
           <img id="pokeball" src="https://pngimg.com/uploads/pokeball/pokeball_PNG21.png" :style="{ height: window.height + 'px' }" >
@@ -38,6 +38,7 @@ export default {
       wholechar: {},
       charURL: null,
       charURLID: null,
+      nameDisplay:"",
       char1: null,
       window: {
         width: 0,
@@ -80,6 +81,11 @@ export default {
       console.log("Height " + window.width);
       console.log("Width " + window.height);
     },
+    nameDisplaymethod() {
+      setTimeout(() => {
+          this.nameDisplay = this.charName
+      }, 500)
+    },
     getAllCharacters: function () {
       axios
         .get('https://pokeapi.co/api/v2/pokemon/?limit=2000')
@@ -95,12 +101,15 @@ export default {
         .then((response) => {
           this.wholechar = response.data;
           this.char1 = response.data.sprites.other.dream_world.front_default;
-          this.charName = response.data.name;
+          
           if (!response.data.sprites.other.dream_world.front_default) {
             // Temp Fix until we can cascade another image
             console.log("try again")
             this.getOneCharacter(this.getRandInt(0, this.characters.count))
           }
+          this.charName = response.data.name;
+          this.nameDisplaymethod()
+
           }).catch(err => {
             console.log("That's a bad", err)
           })
@@ -120,6 +129,7 @@ export default {
     } else {
       this.charName = null;
       this.char1 = null;
+      this.nameDisplay = "";
     }
   },
   }
@@ -133,6 +143,7 @@ export default {
   font-weight: 700;
   font-size: 30px;
   margin-bottom: 10px;
+  height: 30px;
 }
 
 #main {
