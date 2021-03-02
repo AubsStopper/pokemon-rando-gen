@@ -243,4 +243,10 @@ button {
 	top:1px;
 }
 
+@media only screen and (max-width: 600px) {
+  #main {
+    margin-top: 150px;
+  }
+}
+
 </style>
