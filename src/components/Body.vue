@@ -1,9 +1,7 @@
 <template>
  <div>
     <div id="main" >
-      <div>
-        <h3>{{ id }}  {{ nameP }} </h3> 
-        </div>
+      <div class="name"> {{charName }} </div>
       <transition name="slide-fade">
         <div id="pokeball-container" v-show="!show" >
           <img id="pokeball" src="https://pngimg.com/uploads/pokeball/pokeball_PNG21.png" :style="{ height: window.height + 'px' }" >
@@ -16,7 +14,7 @@
       </transition>
       </div>
       <button v-on:click='toggle' v-if="!show">Toss The Ball</button>   
-       <button v-on:click='toggle' v-else>Get Another Ball</button>   
+      <button v-on:click='toggle' v-else>Get Another Ball</button>   
    </div>
 </template>
 
@@ -37,7 +35,9 @@ export default {
         width: 0,
         height: 0
       },
+      max: 898,
       show: false,
+      officalartwork: "offical-artwork",
       id: 6,
       randCharID: null,
       tempChar: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/132.svg"
@@ -85,14 +85,17 @@ export default {
         .then((response) => {
           this.wholechar = response.data;
           this.char1 = response.data.sprites.other.dream_world.front_default;
-          this.nameP = response.data.species.name.toUpperCase();
-          this.id = response.data.id;
-          console.log(this.id)
+          this.charName = response.data.name
+          if (!response.data.sprites.other.dream_world.front_default) {
+            // Temp Fix until we can cascade another image
+            console.log("try again")
+            this.getChar1(this.getRandomInt(this.max))
+          }
           });
     },
     getRandInt: function(min, max) {
       return Math.floor(Math.random() * (max-min+1) + min); // min and max-inclusive
-    },
+   },
   toggle() {
     this.show = !this.show
     if (this.show) {
@@ -103,9 +106,7 @@ export default {
         this.getOneCharacter(this.charURLID)
       }, 1500 );
     } else {
-      this.char1 = null;
-      this.nameP = null;
-      this.id = null;
+      this.charName = null;
     }
   },
   }
@@ -114,6 +115,13 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+
+.name {
+  background-color:#42b983;
+  font-weight: 700;
+  font-size: 30px;
+}
+
 #main {
   margin-top: 100px;
 }
