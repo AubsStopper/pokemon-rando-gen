@@ -1,25 +1,24 @@
 <template>
-
   <Header/>
-  <Body msg="Welcome to Your Vue.js App"/>
-
+  <PokemonRandomGen/>
 </template>
 
 <script>
-import Body from './components/Body.vue'
+import PokemonRandomGen from './components/PokemonRandomGen.vue'
 import Header from './components/Header.vue'
 
 
 export default {
   name: 'App',
   components: {
-    Body,
-    Header
+    Header,
+    PokemonRandomGen
   }
 }
 </script>
 
 <style>
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -27,16 +26,15 @@ export default {
   text-align: center;
   color: #2c3e50;
 
-  display: flex;
-  justify-content: center;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
   width: 100%;
-  margin: 0;
+  
 
 }
 
 body {
-  height: 100vh;
   display: flex;
-
+  margin: 0;
 }
 </style>
