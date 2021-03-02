@@ -106,7 +106,6 @@ export default {
         this.getOneCharacter(this.charURLID)
       }, 1500 );
     } else {
-      this.char1 = null;
       this.charName = null;
     }
   },
