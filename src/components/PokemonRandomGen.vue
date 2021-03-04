@@ -44,6 +44,7 @@ export default {
         width: 0,
         height: 0
       },
+      IdCollection: [],
       max: 898,
       show: false,
       officalartwork: "offical-artwork",
@@ -90,7 +91,16 @@ export default {
       axios
         .get('https://pokeapi.co/api/v2/pokemon/?limit=2000')
         .then((response) => {
-          this.characters = response.data;          
+          this.characters = response.data;  
+
+          let idArray = []
+          for (var i = 0; i < response.data.count; i++) {
+                Object.values(this.characters.results).forEach(value => {
+               //idArray.push(value.url.substring(34).replace("/",""))
+                idArray.push(value.name)
+                })
+                this.IdCollection = idArray
+            }
         }).catch(err => {
           console.log(err)
         })
@@ -105,7 +115,7 @@ export default {
           if (!response.data.sprites.other.dream_world.front_default) {
             // Temp Fix until we can cascade another image
             console.log("try again")
-            this.getOneCharacter(this.getRandInt(0, this.characters.count))
+            this.getOneCharacter(this.IdCollection[this.getRandInt()])
           }
           this.charName = response.data.name;
           this.nameDisplaymethod()
@@ -114,17 +124,14 @@ export default {
             console.log("That's a bad", err)
           })
     },
-    getRandInt: function(min, max) {
-      return Math.floor(Math.random() * (max-min+1) + min); // min and max-inclusive
+    getRandInt: function() {
+      return Math.floor(Math.random() * this.IdCollection.length); 
    },
   toggle() {
     this.show = !this.show
     if (this.show) {
-      this.randCharID = this.getRandInt(0, this.characters.count);
       setTimeout(() => {
-        this.charURL = this.characters.results[this.randCharID].url;
-        this.charURLID = (this.charURL.split("/"))[6]; // 6th position in apiv2
-        this.getOneCharacter(this.charURLID)
+        this.getOneCharacter(this.IdCollection[this.getRandInt()])
       }, 1500 );
     } else {
       this.charName = null;
