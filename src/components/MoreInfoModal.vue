@@ -5,7 +5,17 @@
             <div class="modal-mask">
                 <div class="modal-wrapper">
                     <div class="modal-container">
-                        <div> {{  }} </div>
+                        <div> name : {{ wholechar.name }} </div>
+                        <div> weight: {{ wholechar.weight }} </div>
+                        <div> </div>
+                        <div>
+                            <!-- <img v-bind:src="wholechar.sprites.front_default">    -->
+                        </div>
+
+                        <!-- <div> {{ wholechar.types}} </div> -->
+
+                        <button v-on:click="modalShow = !modalShow"> Close </button>
+                        
                     </div>    
                 </div>
             </div>    
@@ -18,11 +28,15 @@
 export default {
     data() {
         return {
-            modalShow: false
+            modalShow: false,
+            img: undefined
         }
     },
     props: {
-        wholechar: Object
+        wholechar: {}
+    },
+    computed: {
+      
     }
 }
 </script>
@@ -44,6 +58,7 @@ export default {
 .modal-wrapper {
   display: table-cell;
   vertical-align: middle;
+  height: 80%;
 }
 
 .modal-container {
