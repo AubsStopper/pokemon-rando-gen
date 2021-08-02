@@ -15,7 +15,7 @@
       <div class="button-container">
         <button v-on:click='toggle' v-if="!show">Toss The Ball</button>   
         <button v-on:click='toggle' v-else>Get Another Ball</button>   
-        <MoreInfoModal v-show="false" :wholechar="wholechar"/>
+        <MoreInfoModal v-show="show" :wholechar="wholechar"/>
       </div>
       </div>
    </div>
@@ -110,6 +110,8 @@ export default {
         .get(`https://pokeapi.co/api/v2/pokemon/${id}`)
         .then((response) => {
           this.wholechar = response.data;
+          
+          console.log(response.data)
           this.char1 = response.data.sprites.other.dream_world.front_default;
           
           if (!response.data.sprites.other.dream_world.front_default) {
@@ -253,7 +255,7 @@ button {
 	font-family:Arial;
 	font-size:17px;
 	font-weight:bold;
-	padding:12px 44px;
+	padding:12px 24px;
 	text-decoration:none;
 	text-shadow:0px 1px 0px #528ecc;
 }
